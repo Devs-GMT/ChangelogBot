@@ -1,0 +1,262 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces & text — ChangelogBot palette */
+  --color-paper: #ffffff;
+  --color-canvas: #f7f8fa;
+  --color-line: #e7e9ee;
+  --color-ink: #111318;
+  --color-muted: #646b78;
+
+  /* Accent */
+  --color-violet: #6e56cf;
+  --color-violet-hover: #5d46bd;
+  --color-violet-soft: #f1eefc;
+
+  /* Change groups (solid + soft tint for chips) */
+  --color-new: #16a34a;
+  --color-new-soft: #e8f7ee;
+  --color-improved: #2563eb;
+  --color-improved-soft: #e8effd;
+  --color-fixed: #ea580c;
+  --color-fixed-soft: #fdeee4;
+  --color-breaking: #dc2626;
+  --color-breaking-soft: #fce9e9;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-geist), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-btn: 10px;
+  /* Depth: a tight contact shadow plus a long soft one */
+  --shadow-card: 0 1px 2px rgb(17 19 24 / 0.04), 0 10px 28px -14px rgb(17 19 24 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(17 19 24 / 0.05), 0 18px 40px -16px rgb(17 19 24 / 0.2);
+  --shadow-float: 0 2px 6px rgb(17 19 24 / 0.05), 0 40px 80px -32px rgb(49 32 120 / 0.35);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  scrollbar-color: #cfd3dc transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  /* Nothing decorative may widen the page on phones; clip keeps sticky headers working. */
+  overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  caret-color: var(--color-violet);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+code,
+kbd,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: #ddd5fa;
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-violet);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Scrollbars that belong to the palette */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #d5d8e0;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #b9bdc9;
+  background-clip: content-box;
+  border: 3px solid transparent;
+}
+
+/* Buttons and links respond to touch */
+button:not(:disabled),
+a[class*="rounded-btn"] {
+  transition-property: background-color, color, border-color, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: var(--ease-out-expo);
+}
+button:not(:disabled):active,
+a[class*="rounded-btn"]:active {
+  transform: scale(0.98);
+}
+
+/* Dotted canvas for the /app editor */
+.bg-dots {
+  background-color: var(--color-canvas);
+  background-image: radial-gradient(rgb(17 19 24 / 0.11) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* The one authored entrance: hero copy rises in, staggered */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+      filter: blur(6px);
+    }
+  }
+  .rise {
+    animation: rise 0.9s var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+}
+
+/* Pointer spotlight: cards marked [data-spotlight] get a soft glow that follows the cursor.
+   --mx/--my are set by <SpotlightLayer/>; without it the glow simply never shows. */
+[data-spotlight] {
+  position: relative;
+  isolation: isolate;
+}
+[data-spotlight]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out-expo);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(110 86 207 / 0.09), transparent 60%);
+}
+[data-spotlight="dark"]::before {
+  background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgb(167 139 250 / 0.22), transparent 60%);
+}
+@media (hover: hover) {
+  [data-spotlight]:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Dotted texture for dark bands */
+.bg-dots-dark {
+  background-image: radial-gradient(rgb(255 255 255 / 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Infinite horizontal ticker (duplicated content, -50%) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .ticker {
+    animation: ticker var(--ticker-duration, 40s) linear infinite;
+  }
+  .ticker-wrap:hover .ticker {
+    animation-play-state: paused;
+  }
+
+  @keyframes float-y {
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .float-y {
+    animation: float-y 6s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * -1.7s);
+  }
+
+  @keyframes orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .orbit {
+    animation: orbit var(--orbit-duration, 60s) linear infinite;
+  }
+  .orbit-counter {
+    animation: orbit var(--orbit-duration, 60s) linear infinite reverse;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .caret-blink {
+    animation: blink 1.05s steps(1) infinite;
+  }
+}
+
+/* SVG strokes that draw themselves in once (set --len to roughly the path length) */
+.draw-path {
+  stroke-dasharray: var(--len, 400);
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes draw {
+    from {
+      stroke-dashoffset: var(--len, 400);
+    }
+  }
+  .draw-path {
+    animation: draw 1.8s var(--ease-out-expo) both;
+    animation-delay: var(--d, 0s);
+  }
+}
+
+/* Release engine (hero): output cards light up in turn; the core's halo breathes */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes engine-card {
+    0%, 30%, 100% {
+      background-color: rgb(255 255 255 / 0.04);
+    }
+    8%, 20% {
+      background-color: rgb(139 116 255 / 0.16);
+      box-shadow: inset 0 0 0 1px rgb(139 116 255 / 0.7), 0 0 32px -6px rgb(139 116 255 / 0.65);
+    }
+  }
+  @keyframes engine-check {
+    0%, 6%, 100% { transform: scale(0.6); opacity: 0.35; }
+    10%, 26% { transform: scale(1); opacity: 1; }
+  }
+  .engine-card {
+    animation: engine-card 5.6s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 1.4s + 1.8s);
+  }
+  .engine-check {
+    animation: engine-check 5.6s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 1.4s + 1.8s);
+  }
+  @keyframes engine-halo {
+    50% { transform: scale(1.12); opacity: 0.75; }
+  }
+  .engine-halo {
+    animation: engine-halo 4.5s ease-in-out infinite;
+  }
+}

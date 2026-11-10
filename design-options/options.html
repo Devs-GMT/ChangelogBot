@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ChangelogBot · design options</title>
+<style>
+  :root { --ink:#111318; --muted:#646b78; --line:#e7e9ee; --canvas:#f7f8fa; --violet:#6e56cf; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: Inter, system-ui, sans-serif; color:var(--ink); background:#fff; }
+  .wrap { max-width:1200px; margin:0 auto; padding:48px 20px 80px; }
+  h1 { font-size:32px; letter-spacing:-.03em; margin:0 0 6px; }
+  h2 { font-size:22px; letter-spacing:-.02em; margin:56px 0 4px; }
+  p.lead { color:var(--muted); margin:0 0 24px; }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }
+  .card { border:1px solid var(--line); border-radius:18px; overflow:hidden; background:#fff; }
+  .card .body { padding:18px 20px 20px; }
+  .tag { display:inline-block; font:600 12px/1 ui-monospace, monospace; background:var(--ink); color:#fff; padding:6px 9px; border-radius:7px; }
+  .card h3 { margin:12px 0 4px; font-size:17px; }
+  .card p { margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
+  .logo-stage { height:190px; display:flex; align-items:center; justify-content:center; gap:28px; background:var(--canvas); border-bottom:1px solid var(--line); }
+  .word { font-weight:700; font-size:22px; letter-spacing:-.03em; display:flex; align-items:center; gap:10px; }
+  .hero { position:relative; height:330px; overflow:hidden; border-bottom:1px solid var(--line); background:#fff; }
+  .hero .copy { position:absolute; left:24px; top:34px; z-index:2; }
+  .hero .copy b { display:block; font-size:30px; line-height:1; letter-spacing:-.045em; }
+  .hero .copy span { color:var(--muted); }
+  .hero .btn { display:inline-block; margin-top:14px; background:var(--violet); color:#fff; font:600 12px/1 Inter, sans-serif; padding:9px 12px; border-radius:8px; }
+  .hero .win { position:absolute; left:24px; right:24px; bottom:-40px; height:120px; background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 20px 40px -20px rgba(49,32,120,.35); z-index:2; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ChangelogBot — pilihan desain</h1>
+  <p class="lead">Pilih satu logo (A/B/C) dan satu latar (1/2/3). Semua dibuat sebagai SVG, tajam di semua ukuran.</p>
+
+  <h2>Logo</h2>
+  <p class="lead">Ditampilkan besar, kecil (favicon) dan dengan wordmark.</p>
+  <div class="grid">
+    <!-- A: stacked release tags -->
+    <div class="card">
+      <div class="logo-stage">
+        <svg width="84" height="84" viewBox="0 0 64 64"><defs><linearGradient id="ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b74ff"/><stop offset="1" stop-color="#5b3fc4"/></linearGradient></defs>
+          <rect x="16" y="6" width="40" height="26" rx="8" fill="#e4ddff"/>
+          <rect x="11" y="16" width="42" height="27" rx="8" fill="#b9a8ff"/>
+          <rect x="6" y="27" width="46" height="31" rx="9" fill="url(#ga)"/>
+          <path d="M16 37.5h18M16 44h26M16 50.5h12" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".95"/>
+          <path d="M46 34l1.6 3.9 3.9 1.6-3.9 1.6L46 45l-1.6-3.9-3.9-1.6 3.9-1.6L46 34z" fill="#fff"/></svg>
+        <svg width="24" height="24" viewBox="0 0 64 64"><rect x="16" y="6" width="40" height="26" rx="8" fill="#e4ddff"/><rect x="11" y="16" width="42" height="27" rx="8" fill="#b9a8ff"/><rect x="6" y="27" width="46" height="31" rx="9" fill="#6e56cf"/><path d="M16 39h20M16 47h26" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+        <span class="word"><svg width="30" height="30" viewBox="0 0 64 64"><rect x="16" y="6" width="40" height="26" rx="8" fill="#e4ddff"/><rect x="11" y="16" width="42" height="27" rx="8" fill="#b9a8ff"/><rect x="6" y="27" width="46" height="31" rx="9" fill="#6e56cf"/><path d="M16 39h20M16 47h26" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>ChangelogBot</span>
+      </div>
+      <div class="body"><span class="tag">A</span><h3>Tumpukan rilis</h3><p>Tiga kartu catatan bertumpuk (rilis lama di belakang, terbaru di depan) dengan garis teks dan kilau AI. Langsung terbaca "release notes".</p></div>
+    </div>
+
+    <!-- B: branch C -->
+    <div class="card">
+      <div class="logo-stage">
+        <svg width="84" height="84" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#111318"/>
+          <path d="M44 18.5A17 17 0 1 0 44 45.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="44" cy="18.5" r="5.5" fill="#111318" stroke="#fff" stroke-width="3.5"/>
+          <circle cx="44" cy="45.5" r="6.5" fill="#8b74ff"/>
+          <path d="M33 26l1.5 3.6 3.6 1.5-3.6 1.5L33 36.2l-1.5-3.6-3.6-1.5 3.6-1.5L33 26z" fill="#b9a8ff"/></svg>
+        <svg width="24" height="24" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#111318"/><path d="M44 18.5A17 17 0 1 0 44 45.5" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="44" cy="45.5" r="8" fill="#8b74ff"/></svg>
+        <span class="word"><svg width="30" height="30" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#111318"/><path d="M44 18.5A17 17 0 1 0 44 45.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="44" cy="45.5" r="6.5" fill="#8b74ff"/></svg>ChangelogBot</span>
+      </div>
+      <div class="body"><span class="tag">B</span><h3>Cabang "C"</h3><p>Huruf C dibentuk dari garis cabang git: titik commit di atas, titik rilis violet di bawah, kilau AI di tengah. Monogram tegas, tile hitam.</p></div>
+    </div>
+
+    <!-- C: release block -->
+    <div class="card">
+      <div class="logo-stage">
+        <svg width="84" height="84" viewBox="0 0 64 64">
+          <path d="M32 4l24 13.5v29L32 60 8 46.5v-29L32 4z" fill="#5b3fc4"/>
+          <path d="M32 4l24 13.5L32 31 8 17.5 32 4z" fill="#b9a8ff"/>
+          <path d="M8 17.5L32 31v29L8 46.5v-29z" fill="#6e56cf"/>
+          <path d="M14 30l12 6.8M14 37.5l12 6.8M14 45l7 4" stroke="#fff" stroke-width="2.8" stroke-linecap="round" opacity=".9"/>
+          <path d="M32 11l1.3 3.2 3.2 1.3-3.2 1.3L32 20l-1.3-3.2-3.2-1.3 3.2-1.3L32 11z" fill="#fff"/></svg>
+        <svg width="24" height="24" viewBox="0 0 64 64"><path d="M32 4l24 13.5v29L32 60 8 46.5v-29L32 4z" fill="#5b3fc4"/><path d="M32 4l24 13.5L32 31 8 17.5 32 4z" fill="#b9a8ff"/><path d="M8 17.5L32 31v29L8 46.5v-29z" fill="#6e56cf"/></svg>
+        <span class="word"><svg width="30" height="30" viewBox="0 0 64 64"><path d="M32 4l24 13.5v29L32 60 8 46.5v-29L32 4z" fill="#5b3fc4"/><path d="M32 4l24 13.5L32 31 8 17.5 32 4z" fill="#b9a8ff"/><path d="M8 17.5L32 31v29L8 46.5v-29z" fill="#6e56cf"/></svg>ChangelogBot</span>
+      </div>
+      <div class="body"><span class="tag">C</span><h3>Blok catatan</h3><p>Kubus isometrik: blok di chain, dengan satu sisi berisi baris catatan dan kilau di atasnya. Menyatukan "notes" dan "on-chain".</p></div>
+    </div>
+  </div>
+
+  <h2>Latar (background)</h2>
+  <p class="lead">Mockup hero kecil. Ilustrasinya dipakai juga, lebih tipis, di section lain.</p>
+  <div class="grid">
+    <!-- 1: isometric blocks -->
+    <div class="card">
+      <div class="hero">
+        <svg style="position:absolute;right:-10px;top:10px" width="250" height="230" viewBox="0 0 250 230">
+          <defs><linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efeaff"/><stop offset="1" stop-color="#ddd3ff"/></linearGradient></defs>
+          <g opacity=".95">
+            <g transform="translate(120 20)"><path d="M40 0l40 22v44L40 88 0 66V22z" fill="#c9bbff"/><path d="M40 0l40 22-40 22L0 22z" fill="url(#t)"/><path d="M0 22l40 22v44L0 66z" fill="#b19eff"/><text x="12" y="62" font-family="monospace" font-size="10" fill="#fff" transform="skewY(29) translate(0,-30)">v1.4</text></g>
+            <g transform="translate(60 70)" opacity=".75"><path d="M32 0l32 18v36L32 72 0 54V18z" fill="#dcd2ff"/><path d="M32 0l32 18-32 18L0 18z" fill="#f4f1ff"/><path d="M0 18l32 18v36L0 54z" fill="#cfc2ff"/></g>
+            <g transform="translate(170 120)" opacity=".6"><path d="M26 0l26 15v30L26 60 0 45V15z" fill="#e6efff"/><path d="M26 0l26 15-26 15L0 15z" fill="#f5f8ff"/><path d="M0 15l26 15v30L0 45z" fill="#d6e3ff"/></g>
+            <g transform="translate(110 150)" opacity=".5"><path d="M20 0l20 11v22L20 44 0 33V11z" fill="#e2f6ea"/><path d="M20 0l20 11-20 11L0 11z" fill="#f2fbf5"/><path d="M0 11l20 11v22L0 33z" fill="#cdeed9"/></g>
+          </g>
+          <path d="M160 108v14M118 130l-10 8" stroke="#b9a8ff" stroke-width="1.5" stroke-dasharray="3 4"/>
+        </svg>
+        <div class="copy"><b>The <span>changelog</span><br/>writer built</b><a class="btn">Write my changelog</a></div>
+        <div class="win"></div>
+      </div>
+      <div class="body"><span class="tag">1</span><h3>Blok rilis melayang</h3><p>Ilustrasi kubus isometrik pastel (setiap kubus = satu rilis) melayang di sisi kanan hero, sedikit bergerak saat scroll (parallax). Versi kecil di section lain.</p></div>
+    </div>
+
+    <!-- 2: paper collage -->
+    <div class="card">
+      <div class="hero" style="background:#fbfaf7">
+        <div style="position:absolute;right:20px;top:24px;width:170px;height:120px;background:#fff;border:1px solid #ebe7df;border-radius:10px;transform:rotate(8deg);box-shadow:0 14px 30px -18px rgba(0,0,0,.35);padding:12px">
+          <div style="font:700 11px monospace">v1.3.0</div><div style="margin-top:8px;height:6px;width:70%;background:#e8f7ee;border-radius:9px"></div><div style="margin-top:6px;height:6px;width:90%;background:#eee;border-radius:9px"></div><div style="margin-top:6px;height:6px;width:60%;background:#eee;border-radius:9px"></div></div>
+        <div style="position:absolute;right:90px;top:70px;width:180px;height:130px;background:#fff;border:1px solid #ebe7df;border-radius:10px;transform:rotate(-6deg);box-shadow:0 18px 34px -18px rgba(0,0,0,.4);padding:12px">
+          <div style="font:700 11px monospace">v1.4.0 <span style="color:#6e56cf">✦</span></div><div style="margin-top:8px;height:6px;width:50%;background:#f1eefc;border-radius:9px"></div><div style="margin-top:6px;height:6px;width:85%;background:#eee;border-radius:9px"></div><div style="margin-top:6px;height:6px;width:70%;background:#e8effd;border-radius:9px"></div><div style="margin-top:6px;height:6px;width:40%;background:#fdeee4;border-radius:9px"></div></div>
+        <div style="position:absolute;right:-20px;top:150px;width:120px;height:90px;background:#fff;border:1px solid #ebe7df;border-radius:10px;transform:rotate(14deg);opacity:.7"></div>
+        <div class="copy"><b>The <span>changelog</span><br/>writer built</b><a class="btn">Write my changelog</a></div>
+        <div class="win"></div>
+      </div>
+      <div class="body"><span class="tag">2</span><h3>Kolase kertas rilis</h3><p>Lembar-lembar release notes berserakan miring dengan bayangan lembut, seperti di atas meja, di atas permukaan putih gading hangat. Bergeser pelan saat scroll.</p></div>
+    </div>
+
+    <!-- 3: giant numerals -->
+    <div class="card">
+      <div class="hero">
+        <svg style="position:absolute;right:-30px;top:-20px" width="330" height="300" viewBox="0 0 330 300">
+          <defs><linearGradient id="nv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ece7ff"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+          <text x="10" y="230" font-family="Inter, sans-serif" font-weight="800" font-size="210" letter-spacing="-14" fill="url(#nv)" stroke="#e1dafb" stroke-width="1.5">1.4</text>
+          <circle cx="242" cy="216" r="9" fill="#6e56cf"/>
+        </svg>
+        <div class="copy"><b>The <span>changelog</span><br/>writer built</b><a class="btn">Write my changelog</a></div>
+        <div class="win"></div>
+      </div>
+      <div class="body"><span class="tag">3</span><h3>Angka versi raksasa</h3><p>Tipografi besar "1.4" bergaris violet tipis di belakang hero. Angkanya berganti (1.2 → 1.3 → 1.4) saat scroll, seperti versi yang naik. Section lain memakai nomor versi mereka sendiri.</p></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
