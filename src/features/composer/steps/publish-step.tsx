@@ -15,6 +15,7 @@ import { hashNotesJson, serializeNotes, shaToBytes20 } from "@/lib/changelog/not
 import { checkMaintainerFile, type VerifyResult } from "@/lib/github/client";
 import { getReleasesFor } from "@/web3/contract";
 import { uploadNotes } from "../api";
+import { PublishSuccess } from "./publish-success";
 import { useComposer } from "../use-composer";
 
 type Verification = { wallet: string; result: VerifyResult } | null;
@@ -24,6 +25,24 @@ const VERIFY_TEXT: Record<string, string> = {
   "wrong-wallet": "The .changelogbot file does not contain your connected wallet — this release will be published as unverified.",
   error: "Could not read the .changelogbot file right now — this release will be published as unverified.",
 };
+
+const PROGRESS = ["Verify", "IPFS", "Sign", "Confirm"];
+
+/** Four short steps so the wait between "Publish" and "Recorded" never feels stuck. */
+function PublishProgress({ active }: { active: number }) {
+  return (
+    <ol aria-label="Publish progress" className="grid grid-cols-4 gap-1.5">
+      {PROGRESS.map((label, i) => (
+        <li key={label} className="grid gap-1.5 text-center text-[11px]">
+          <span
+            className={`h-1 rounded-full ${i < active ? "bg-violet" : i === active ? "step-glow bg-violet" : "bg-line"}`}
+          />
+          <span className={i <= active ? "font-medium text-ink" : "text-muted"}>{label}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 export function PublishStep() {
   const { state } = useComposer();
@@ -122,22 +141,7 @@ export function PublishStep() {
               : "Publish release";
 
   if (status === "success") {
-    return (
-      <section aria-label="Publish" className="rise grid gap-3 border-t border-new/30 bg-new-soft/50 p-5">
-        <Chip tone="new" className="w-fit"><CheckIcon className="size-3.5" /> Recorded on BOT Chain</Chip>
-        <p className="text-sm">
-          <strong>{notes.version}</strong> is now part of the permanent history of <strong>{notes.repo}</strong>.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <ButtonLink href={`/c/${notes.repo}`} size="sm">View changelog page</ButtonLink>
-          {txHash && (
-            <ButtonLink external size="sm" variant="secondary" href={txExplorerUrl(txHash)}>
-              View transaction <ArrowUpRightIcon className="size-3.5" />
-            </ButtonLink>
-          )}
-        </div>
-      </section>
-    );
+    return <PublishSuccess repo={notes.repo} version={notes.version} txHash={txHash ?? undefined} />;
   }
 
   return (
@@ -182,6 +186,8 @@ export function PublishStep() {
           </>
         )}
       </div>
+
+      {busy && <PublishProgress active={checking ? 0 : uploading ? 1 : status === "pending" ? 3 : 2} />}
 
       {blocker && <Notice tone="warn">{blocker}</Notice>}
       {(error || localError) && <Notice tone="error">{localError ?? error}</Notice>}

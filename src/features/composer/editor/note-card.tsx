@@ -18,7 +18,7 @@ export function NoteCard({ item, onEdit, onHide, onMove, handleProps, overlay }:
   return (
     <div
       className={cn(
-        "group/note rounded-lg border border-line bg-paper p-2.5 text-sm",
+        "group/note rounded-xl border border-line bg-paper p-2.5 text-sm shadow-card transition hover:-translate-y-px hover:border-violet/30",
         overlay && "shadow-float ring-1 ring-violet/30",
       )}
     >

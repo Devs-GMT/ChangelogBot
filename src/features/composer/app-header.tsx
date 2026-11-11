@@ -36,17 +36,17 @@ export function AppHeader() {
         </Link>
 
         {/* Breadcrumb: where you are in the work */}
-        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2 text-sm">
+        <nav aria-label="Breadcrumb" className="flex min-w-0 flex-1 items-center gap-2 text-sm">
           <span aria-hidden="true" className="text-line">/</span>
           {hasRepo && state.repo ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={state.repo.avatarUrl} alt="" width={20} height={20} className="size-5 shrink-0 rounded-md border border-line" />
-              <span className="truncate font-medium">{state.repo.fullName}</span>
+              <span className="min-w-0 truncate font-medium">{state.repo.fullName}</span>
               {from && (
                 <>
-                  <span aria-hidden="true" className="text-line max-sm:hidden">/</span>
-                  <span className="truncate font-mono text-xs text-muted max-sm:hidden">
+                  <span aria-hidden="true" className="text-line max-md:hidden">/</span>
+                  <span className="shrink-0 truncate font-mono text-xs text-muted max-md:hidden">
                     {from} → {state.version || edgeLabel(state.to)}
                   </span>
                 </>
@@ -57,7 +57,7 @@ export function AppHeader() {
           )}
         </nav>
 
-        <ol aria-label="Progress" className="ml-auto hidden items-center gap-1 lg:flex">
+        <ol aria-label="Progress" className="hidden shrink-0 items-center gap-1 xl:flex">
           {STEPS.map((label, i) => {
             const done = i < current;
             const active = i === current;
@@ -85,7 +85,7 @@ export function AppHeader() {
           })}
         </ol>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
+        <div className="flex shrink-0 items-center gap-2 xl:ml-2 xl:border-l xl:border-line xl:pl-4">
           <ConnectButton size="sm" />
         </div>
       </div>

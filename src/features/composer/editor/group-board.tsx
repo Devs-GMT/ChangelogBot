@@ -43,6 +43,13 @@ function SortableNote({ item }: { item: NoteItem }) {
   );
 }
 
+const ACCENT: Record<Group, string> = {
+  new: "border-t-new",
+  improved: "border-t-improved",
+  fixed: "border-t-fixed",
+  breaking: "border-t-breaking",
+};
+
 function Column({ group, items }: { group: (typeof GROUPS)[number]; items: NoteItem[] }) {
   const { actions } = useComposer();
   const { setNodeRef, isOver } = useDroppable({ id: `${COL_PREFIX}${group.id}` });
@@ -50,8 +57,9 @@ function Column({ group, items }: { group: (typeof GROUPS)[number]; items: NoteI
     <section
       aria-label={`${group.label} changes`}
       className={cn(
-        "flex min-h-32 flex-col rounded-xl border bg-canvas/60 p-2.5 transition-colors",
-        isOver ? "border-violet/50 bg-violet-soft/50" : "border-line",
+        "flex min-h-32 flex-col rounded-2xl border border-t-[3px] bg-canvas/70 p-3 transition-colors",
+        ACCENT[group.id],
+        isOver ? "border-violet/50 bg-violet-soft/60 ring-4 ring-violet/10" : "border-line",
       )}
     >
       <header className="mb-2 flex items-center justify-between px-0.5">
@@ -129,7 +137,7 @@ export function GroupBoard() {
       onDragEnd={onDragEnd}
       onDragCancel={() => setActiveId(null)}
     >
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid items-start gap-3 @2xl:grid-cols-2">
         {GROUPS.map((g) => (
           <Column key={g.id} group={g} items={byGroup(g.id)} />
         ))}

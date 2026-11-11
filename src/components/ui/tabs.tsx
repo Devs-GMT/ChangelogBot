@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils/cn";
 export interface TabItem<T extends string> {
   id: T;
   label: string;
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
 /** Accessible tablist (arrow keys, roving tabindex). Panels are rendered by the caller. */
@@ -15,12 +16,17 @@ export function Tabs<T extends string>({
   onChange,
   className,
   label,
+  size = "md",
+  stretch = false,
 }: {
   tabs: readonly TabItem<T>[];
   value: T;
   onChange: (id: T) => void;
   className?: string;
   label: string;
+  size?: "sm" | "md";
+  /** Fill the row with equal-width tabs (narrow panes). */
+  stretch?: boolean;
 }) {
   const base = useId();
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -35,7 +41,11 @@ export function Tabs<T extends string>({
   };
 
   return (
-    <div role="tablist" aria-label={label} className={cn("inline-flex gap-1 rounded-xl border border-line bg-canvas p-1", className)}>
+    <div role="tablist" aria-label={label} className={cn(
+        "gap-1 rounded-xl border border-line bg-canvas p-1",
+        stretch ? "grid w-full auto-cols-fr grid-flow-col" : "inline-flex",
+        className,
+      )}>
       {tabs.map((tab, i) => {
         const active = tab.id === value;
         return (
@@ -52,10 +62,12 @@ export function Tabs<T extends string>({
             onClick={() => onChange(tab.id)}
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cn(
-              "rounded-lg px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors",
+              "flex min-w-0 items-center justify-center gap-1.5 rounded-lg font-medium whitespace-nowrap transition-colors",
+              size === "sm" ? "px-2.5 py-1 text-xs" : "px-3 py-1.5 text-[13px]",
               active ? "bg-paper text-ink shadow-sm" : "text-muted hover:text-ink",
             )}
           >
+            {tab.icon && <tab.icon className="size-3.5 shrink-0" />}
             {tab.label}
           </button>
         );

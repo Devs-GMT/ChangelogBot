@@ -19,15 +19,19 @@ export function TonePicker() {
   const busy = state.drafting === "loading";
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <span className="text-[13px] font-medium">Tone</span>
-      <Tabs label="Tone of voice" tabs={TONES} value={state.tone} onChange={(tone) => actions.patch({ tone })} />
+    <div className="grid gap-2">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <span className="text-xs font-medium text-muted">Tone of voice</span>
+        <Tabs label="Tone of voice" size="sm" tabs={TONES} value={state.tone} onChange={(tone) => actions.patch({ tone })} />
+      </div>
       {changed && (
-        <Button size="sm" disabled={busy} onClick={() => void actions.rewrite(state.tone)}>
-          {busy ? "Rewriting…" : "Rewrite in this tone"}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="sm" disabled={busy} onClick={() => void actions.rewrite(state.tone)}>
+            {busy ? "Rewriting…" : "Rewrite in this tone"}
+          </Button>
+          <span className="text-xs text-muted">Replaces the AI text and your edits.</span>
+        </div>
       )}
-      {changed && <span className="text-xs text-muted">Replaces the AI-written text and your edits.</span>}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { CubeIcon, GitHubIcon } from "@/components/ui/icons";
 import { CONTRACT_EXPLORER_URL, isContractConfigured } from "@/config/contract";
+import { ReleaseBlocks } from "@/features/marketing/illustrations/release-blocks";
 import { ReleaseCard } from "@/features/changelog-page/release-card";
 import { Navbar } from "@/features/marketing/layout/navbar";
 import { getCachedReleasesFor } from "@/server/chain/queries";
@@ -33,7 +34,7 @@ export default function ChangelogPage({ params }: { params: Promise<Params> }) {
   return (
     <>
       <Navbar />
-      <div className="mx-auto w-full max-w-4xl px-4 pb-24 pt-12 sm:pt-16">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-24 pt-12 sm:pt-16">
         <Suspense fallback={<ChangelogSkeleton />}>
           <Changelog params={params} />
         </Suspense>
@@ -79,6 +80,7 @@ async function Changelog({ params }: { params: Promise<Params> }) {
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 -top-28 h-64 w-96 rounded-full bg-violet/[0.12] blur-[80px]"
         />
+        <ReleaseBlocks scene="small" className="absolute -right-2 top-4 hidden w-44 opacity-90 md:block lg:w-52" />
         <div className="relative flex flex-wrap items-end justify-between gap-6">
           <div className="flex min-w-0 items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}

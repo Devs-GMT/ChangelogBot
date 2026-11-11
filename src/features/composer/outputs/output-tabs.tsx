@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRightIcon } from "@/components/ui/icons";
+import { ArrowUpRightIcon, GitHubIcon, LinkChainIcon, MailIcon, XLogoIcon } from "@/components/ui/icons";
 import { ButtonLink } from "@/components/ui/button";
 import { Tabs, type TabItem } from "@/components/ui/tabs";
 import { publishableNotes } from "@/lib/changelog/notes-hash";
@@ -14,10 +14,10 @@ import { XPostTab } from "./x-post-tab";
 
 type TabId = "page" | "github" | "x" | "email";
 const TABS: readonly TabItem<TabId>[] = [
-  { id: "page", label: "Changelog page" },
-  { id: "github", label: "GitHub Release" },
-  { id: "x", label: "X post" },
-  { id: "email", label: "Email" },
+  { id: "page", label: "Page", icon: LinkChainIcon },
+  { id: "github", label: "GitHub", icon: GitHubIcon },
+  { id: "x", label: "X", icon: XLogoIcon },
+  { id: "email", label: "Email", icon: MailIcon },
 ];
 
 export function OutputTabs() {
@@ -32,9 +32,7 @@ export function OutputTabs() {
 
   return (
     <section aria-label="Outputs" className="grid gap-3 p-5">
-      <div className="-mx-1 overflow-x-auto px-1 pb-1">
-        <Tabs label="Output format" tabs={TABS} value={tab} onChange={setTab} />
-      </div>
+      <Tabs label="Output format" tabs={TABS} value={tab} onChange={setTab} stretch />
 
       {tab === "page" && <PagePreviewTab notes={published} />}
       {tab === "github" && (

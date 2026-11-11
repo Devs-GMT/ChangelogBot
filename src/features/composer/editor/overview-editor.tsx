@@ -38,18 +38,30 @@ export function OverviewEditor() {
         {notes.highlights.map((h, i) => {
           const badUrl = !isHttp(h.imageUrl ?? "");
           return (
-            <div key={i} className="grid gap-2 rounded-xl border border-line bg-canvas/60 p-3">
-              <div className="flex gap-2">
+            <div key={i} className="grid gap-2 rounded-xl border border-line bg-canvas/50 p-3 [&>*:not(:first-child)]:ml-8 [&>*:not(:first-child)]:w-[calc(100%-2rem)]">
+              <div className="flex items-center gap-2">
+                <span className="tabular grid size-6 shrink-0 place-items-center rounded-full bg-violet-soft text-[11px] font-semibold text-violet">
+                  {i + 1}
+                </span>
                 <input
                   aria-label={`Highlight ${i + 1} title`}
                   value={h.title}
                   onChange={(e) => actions.editHighlight(i, { title: e.target.value })}
                   maxLength={80}
-                  className={`${inputClass} font-medium`}
+                  placeholder="Highlight title"
+                  className={`${inputClass} min-w-0 font-medium`}
                 />
-                <Button size="sm" variant="ghost" onClick={() => actions.removeHighlight(i)} aria-label={`Remove highlight ${i + 1}`}>
-                  Remove
-                </Button>
+                <button
+                  type="button"
+                  onClick={() => actions.removeHighlight(i)}
+                  aria-label={`Remove highlight ${i + 1}`}
+                  title="Remove"
+                  className="grid size-9 shrink-0 place-items-center rounded-lg text-muted transition-colors hover:bg-breaking-soft hover:text-breaking"
+                >
+                  <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+                    <path d="M4 4l8 8M12 4l-8 8" />
+                  </svg>
+                </button>
               </div>
               <input
                 aria-label={`Highlight ${i + 1} description`}

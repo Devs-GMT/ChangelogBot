@@ -260,3 +260,47 @@ a[class*="rounded-btn"]:active {
     animation: engine-halo 4.5s ease-in-out infinite;
   }
 }
+
+/* /app: the forge (reading + drafting) and the publish celebration */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes forge-drop {
+    0% { transform: translate(var(--fx, 0), -70px) scale(0.9); opacity: 0; }
+    14% { opacity: 1; }
+    52%, 100% { transform: translate(0, 62px) scale(0.35); opacity: 0; }
+  }
+  .forge-drop {
+    animation: forge-drop 2.8s cubic-bezier(0.5, 0, 0.75, 0.4) infinite;
+    animation-delay: calc(var(--i, 0) * 0.5s);
+  }
+  @keyframes step-glow {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
+  }
+  .step-glow {
+    animation: step-glow 1.6s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    to { background-position: -200% 0; }
+  }
+  .shimmer {
+    background-image: linear-gradient(90deg, transparent 30%, rgb(110 86 207 / 0.12) 50%, transparent 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+  }
+  @keyframes confetti {
+    0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    100% { transform: translate(var(--dx, 0), var(--dy, 120px)) rotate(var(--r, 360deg)); opacity: 0; }
+  }
+  .confetti {
+    animation: confetti 1.6s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 35ms);
+  }
+  @keyframes pop-in {
+    0% { transform: scale(0.6); opacity: 0; }
+    70% { transform: scale(1.06); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .pop-in {
+    animation: pop-in 0.7s var(--ease-out-expo) both;
+  }
+}

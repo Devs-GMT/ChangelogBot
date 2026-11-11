@@ -1,12 +1,62 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Field, inputClass, Notice } from "@/components/ui/field";
+import { inputClass, Notice } from "@/components/ui/field";
 import type { RangeEdge, RangeEnd } from "@/lib/github/types";
+import { cn } from "@/lib/utils/cn";
 import { useComposer } from "../use-composer";
+import { PaneSection } from "./pane-section";
 
 type FromMode = "tag" | "date";
 type ToMode = "latest" | "tag" | "date";
+
+/** Small segmented switch beside a field label (Tag / Date / Latest). */
+function Segmented<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: [T, string][];
+  onChange: (v: T) => void;
+}) {
+  if (options.length < 2) return null;
+  return (
+    <div role="radiogroup" aria-label={label} className="flex shrink-0 rounded-lg bg-canvas p-0.5 ring-1 ring-line">
+      {options.map(([v, text]) => (
+        <button
+          key={v}
+          type="button"
+          role="radio"
+          aria-checked={value === v}
+          onClick={() => onChange(v)}
+          className={cn(
+            "rounded-md px-2 py-0.5 text-[11px] font-medium transition-colors",
+            value === v ? "bg-paper text-ink shadow-sm" : "text-muted hover:text-ink",
+          )}
+        >
+          {text}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function FieldRow({ label, htmlFor, control, children }: { label: string; htmlFor: string; control?: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="grid gap-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <label htmlFor={htmlFor} className="text-[13px] font-medium">
+          {label}
+        </label>
+        {control}
+      </div>
+      {children}
+    </div>
+  );
+}
 
 export function RangeStep() {
   const { state, actions } = useComposer();
@@ -29,7 +79,7 @@ export function RangeStep() {
   const edgeInput = (edge: RangeEdge | RangeEnd | null, onChange: (e: RangeEdge) => void, id: string) => {
     if (edge?.kind === "ref") {
       return (
-        <select id={id} className={inputClass} value={edge.ref} onChange={(e) => onChange({ kind: "ref", ref: e.target.value })}>
+        <select id={id} className={cn(inputClass, "font-mono")} value={edge.ref} onChange={(e) => onChange({ kind: "ref", ref: e.target.value })}>
           {tags.map((t) => (
             <option key={t.name} value={t.name}>
               {t.name}
@@ -46,88 +96,70 @@ export function RangeStep() {
     return null;
   };
 
-  const modeSelect = <T extends string>(id: string, value: T, onChange: (v: T) => void, options: [T, string][]) => (
-    <select id={id} className={inputClass} value={value} onChange={(e) => onChange(e.target.value as T)}>
-      {options.map(([v, label]) => (
-        <option key={v} value={v}>
-          {label}
-        </option>
-      ))}
-    </select>
-  );
-
   const busy = state.reading === "loading" || state.drafting === "loading";
   const invalidVersion = state.version.length > 20;
 
   return (
-    <section aria-label="Range" className="rise border-b border-line p-5">
-      <h2 className="mb-3 flex items-center gap-2 text-[15px]">
-        <span className="tabular grid size-5 place-items-center rounded-full bg-violet-soft text-[11px] text-violet">2</span>
-        What changed?
-      </h2>
-      <div className="grid gap-3">
-        {!hasTags && (
-          <Notice>This repo has no tags yet — pick a date range. Start from the first commit with the default date.</Notice>
-        )}
+    <PaneSection title="Range">
+      <div className="grid gap-4">
+        {!hasTags && <Notice>This repo has no tags yet, so pick dates. “From” starts at the first commit.</Notice>}
 
-        <div className="grid grid-cols-[96px_1fr] items-end gap-2">
-          <Field label="From" htmlFor="from-mode">
-            {modeSelect<FromMode>("from-mode", fromMode, setFromMode, hasTags ? [["tag", "Tag"], ["date", "Date"]] : [["date", "Date"]])}
-          </Field>
-          <Field label="From (tag or date)" htmlFor="from-value" className="[&>label]:sr-only">
-            {edgeInput(from, (e) => actions.patch({ from: e }), "from-value")}
-          </Field>
-        </div>
-
-        <div className="grid grid-cols-[96px_1fr] items-end gap-2">
-          <Field label="To" htmlFor="to-mode">
-            {modeSelect<ToMode>(
-              "to-mode",
-              toMode,
-              setToMode,
-              hasTags
-                ? [["latest", "Latest"], ["tag", "Tag"], ["date", "Date"]]
-                : [["latest", "Latest"], ["date", "Date"]],
-            )}
-          </Field>
-          <Field label="To (tag or date)" htmlFor="to-value" className="[&>label]:sr-only">
-            {to.kind === "latest" ? (
-              <input id="to-value" className={inputClass} value={`Latest commit (${repo.defaultBranch})`} disabled readOnly />
-            ) : (
-              edgeInput(to, (e) => actions.patch({ to: e }), "to-value")
-            )}
-          </Field>
-        </div>
-
-        <Field
-          label="New version"
-          htmlFor="version"
-          hint={
-            invalidVersion
-              ? "Max 20 characters."
-              : state.notes
-                ? "Suggested from the changes (breaking → major, new → minor, fixes → patch)."
-                : "Suggested automatically once changes are read."
+        <FieldRow
+          label="From"
+          htmlFor="from-value"
+          control={
+            <Segmented<FromMode> label="From type" value={fromMode} onChange={setFromMode} options={hasTags ? [["tag", "Tag"], ["date", "Date"]] : [["date", "Date"]]} />
           }
         >
+          {edgeInput(from, (e) => actions.patch({ from: e }), "from-value")}
+        </FieldRow>
+
+        <FieldRow
+          label="To"
+          htmlFor="to-value"
+          control={
+            <Segmented<ToMode>
+              label="To type"
+              value={toMode}
+              onChange={setToMode}
+              options={hasTags ? [["latest", "Latest"], ["tag", "Tag"], ["date", "Date"]] : [["latest", "Latest"], ["date", "Date"]]}
+            />
+          }
+        >
+          {to.kind === "latest" ? (
+            <input id="to-value" className={inputClass} value={`Latest commit on ${repo.defaultBranch}`} disabled readOnly />
+          ) : (
+            edgeInput(to, (e) => actions.patch({ to: e }), "to-value")
+          )}
+        </FieldRow>
+
+        <FieldRow label="New version" htmlFor="version">
           <input
             id="version"
-            className={inputClass}
+            className={cn(inputClass, "font-mono")}
             value={state.version}
             onChange={(e) => actions.setVersion(e.target.value.trim())}
             placeholder="v1.4.0"
             maxLength={40}
             spellCheck={false}
             aria-invalid={invalidVersion}
+            aria-describedby="version-hint"
           />
-        </Field>
+          <p id="version-hint" className={cn("text-xs", invalidVersion ? "text-breaking" : "text-muted")}>
+            {invalidVersion
+              ? "Max 20 characters."
+              : state.notes
+                ? "Suggested from the changes. Edit it if you like."
+                : "Suggested automatically after reading."}
+          </p>
+        </FieldRow>
 
-        <label className="flex cursor-pointer items-center gap-2 text-[13px] text-muted">
+        <label className="flex cursor-pointer items-start gap-2.5 text-[13px] leading-snug text-muted">
           <input
             type="checkbox"
             checked={state.includeNoise}
             onChange={(e) => actions.patch({ includeNoise: e.target.checked })}
-            className="size-4 accent-violet"
+            className="mt-0.5 size-4 shrink-0 accent-violet"
           />
           Include merges, chores, CI and dependency bumps
         </label>
@@ -136,6 +168,6 @@ export function RangeStep() {
           {state.reading === "loading" ? "Reading changes…" : state.drafting === "loading" ? "Drafting…" : state.notes ? "Read again" : "Read changes"}
         </Button>
       </div>
-    </section>
+    </PaneSection>
   );
 }
