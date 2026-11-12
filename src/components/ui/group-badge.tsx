@@ -1,15 +1,20 @@
 import { GROUPS, type Group } from "@/lib/changelog/types";
 import { cn } from "@/lib/utils/cn";
-import { Chip, type ChipTone } from "./chip";
-import { GroupIcon } from "./icons";
 
-/** "New / Improved / Fixed / Breaking" chip with its drawn icon (emoji stay in plain-text outputs only). */
+const dots: Record<Group, string> = {
+  new: "bg-new",
+  improved: "bg-improved",
+  fixed: "bg-fixed",
+  breaking: "bg-breaking",
+};
+
+/** "New / Improved / Fixed / Breaking" label: a coloured dot plus text, no pill (emoji stay in plain-text outputs only). */
 export function GroupBadge({ group, className, label }: { group: Group; className?: string; label?: string }) {
   const meta = GROUPS.find((g) => g.id === group)!;
   return (
-    <Chip tone={group as ChipTone} className={cn("pr-3", className)}>
-      <GroupIcon group={group} className="size-3.5" />
+    <span className={cn("inline-flex items-center gap-2 text-xs font-medium whitespace-nowrap text-ink", className)}>
+      <span className={cn("size-1.5 shrink-0 rounded-full", dots[group])} aria-hidden="true" />
       {label ?? meta.label}
-    </Chip>
+    </span>
   );
 }
