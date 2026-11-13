@@ -14,9 +14,10 @@ export function HiddenTray() {
       <summary className="cursor-pointer px-4 py-3 text-[13px] font-medium text-muted hover:text-ink">
         Hidden items ({hidden.length}) — not published
       </summary>
-      <ul className="grid gap-1.5 border-t border-line p-3">
+      {/* grid-cols-1 + min-w-0: without them a long commit title stretches the whole page sideways. */}
+      <ul className="grid grid-cols-1 gap-1.5 border-t border-line p-3">
         {hidden.map((item) => (
-          <li key={item.id} className="flex items-center gap-2 rounded-lg bg-canvas px-3 py-2 text-[13px]">
+          <li key={item.id} className="flex min-w-0 items-center gap-2 rounded-lg bg-canvas px-3 py-2 text-[13px]">
             <span className="min-w-0 flex-1 truncate text-muted" title={item.text}>
               {item.text || "(empty)"}
             </span>

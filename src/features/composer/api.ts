@@ -28,5 +28,14 @@ export const requestXPost = (body: {
   url?: string;
 }) => post<{ post: string; thread: string[] }>("/api/changelog/post", body);
 
+/** Creates the GitHub Release with the signed-in user's token; returns its page URL. */
+export const createGitHubRelease = (body: {
+  repo: string;
+  tag: string;
+  body: string;
+  targetCommitish: string;
+  draft: boolean;
+}) => post<{ url: string }>("/api/github/release", body);
+
 /** Uploads the canonical notes JSON to IPFS and returns its CID. */
 export const uploadNotes = (json: string) => post<{ cid: string }>("/api/upload", { json });

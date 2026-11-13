@@ -21,6 +21,11 @@ export interface TagInfo {
   sha: string;
 }
 
+export interface BranchInfo {
+  name: string;
+  sha: string;
+}
+
 export interface ReleaseInfo {
   tagName: string;
   name: string | null;

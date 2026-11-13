@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckIcon } from "@/components/ui/icons";
 import { LogoMark } from "@/components/ui/logo";
+import { GitHubButton } from "@/features/github-auth/github-button";
 import { ConnectButton } from "@/features/wallet/connect-button";
 import { cn } from "@/lib/utils/cn";
 import { useComposer } from "./use-composer";
@@ -30,13 +31,13 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-40 shrink-0 border-b border-line bg-paper/90 backdrop-blur-xl">
-      <div className="flex h-14 items-center gap-3 px-4">
+      <div className="flex h-14 items-center gap-2 px-3 sm:gap-3 sm:px-4">
         <Link href="/" aria-label="ChangelogBot home" className="shrink-0 rounded-md">
           <LogoMark className="size-7" />
         </Link>
 
-        {/* Breadcrumb: where you are in the work */}
-        <nav aria-label="Breadcrumb" className="flex min-w-0 flex-1 items-center gap-2 text-sm">
+        {/* Breadcrumb: where you are in the work. It gives way first when the buttons need room. */}
+        <nav aria-label="Breadcrumb" className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden text-sm">
           <span aria-hidden="true" className="text-line">/</span>
           {hasRepo && state.repo ? (
             <>
@@ -53,7 +54,7 @@ export function AppHeader() {
               )}
             </>
           ) : (
-            <span className="font-medium">New changelog</span>
+            <span className="min-w-0 truncate font-medium">New changelog</span>
           )}
         </nav>
 
@@ -85,8 +86,9 @@ export function AppHeader() {
           })}
         </ol>
 
-        <div className="flex shrink-0 items-center gap-2 xl:ml-2 xl:border-l xl:border-line xl:pl-4">
-          <ConnectButton size="sm" />
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 xl:ml-2 xl:border-l xl:border-line xl:pl-4">
+          <GitHubButton size="sm" compact />
+          <ConnectButton size="sm" compact />
         </div>
       </div>
       {/* Progress along the bottom edge */}

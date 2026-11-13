@@ -31,11 +31,11 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: 560 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 30, fontWeight: 700 }}>
             <svg width="56" height="56" viewBox="0 0 64 64">
-              <rect x="16" y="6" width="40" height="26" rx="8" fill="#E4DDFF" />
-              <rect x="11" y="16" width="42" height="27" rx="8" fill="#B9A8FF" />
-              <rect x="6" y="27" width="46" height="31" rx="9" fill="#6E56CF" />
-              <path d="M16 37.5h18M16 44h26M16 50.5h12" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" />
-              <path d="M46 34l1.6 3.9 3.9 1.6-3.9 1.6L46 45l-1.6-3.9-3.9-1.6 3.9-1.6L46 34Z" fill="#fff" />
+              <rect x="4" y="4" width="56" height="56" rx="16" fill="#2563EB" />
+              <g transform="translate(-2 0)" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M30 21H21a5 5 0 0 0-5 5v12a5 5 0 0 0 5 5h9" />
+                <path d="M36 21v22M36 21h8a5.5 5.5 0 0 1 0 11h-8M36 32h10a5.5 5.5 0 0 1 0 11H36" />
+              </g>
             </svg>
             {siteConfig.name}
           </div>

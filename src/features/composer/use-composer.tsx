@@ -9,6 +9,7 @@ import { rangeStats } from "@/lib/changelog/stats";
 import type { Group, Highlight, NoteItem, RangeStats, ReleaseNotes, Tone } from "@/lib/changelog/types";
 import {
   EmptyRangeError,
+  getBranches,
   getReleases,
   getRepo,
   getTags,
@@ -19,7 +20,7 @@ import {
   RepoNotFoundError,
   type RangeData,
 } from "@/lib/github/client";
-import type { RangeEdge, RangeEnd, ReleaseInfo, RepoInfo, RepoRef, TagInfo } from "@/lib/github/types";
+import type { BranchInfo, RangeEdge, RangeEnd, ReleaseInfo, RepoInfo, RepoRef, TagInfo } from "@/lib/github/types";
 import { requestDraft } from "./api";
 
 export type Phase = "repo" | "range" | "compose";
@@ -31,10 +32,13 @@ export interface ComposerState {
   repoRef: RepoRef | null;
   repo: RepoInfo | null;
   tags: TagInfo[];
+  branches: BranchInfo[];
   releases: ReleaseInfo[];
   loadingRepo: boolean;
   repoError: string | null;
 
+  /** "Latest" points at this branch's head, and date ranges walk its history. */
+  branch: string;
   from: RangeEdge | null;
   to: RangeEnd;
   version: string;
@@ -59,9 +63,11 @@ const initialState: ComposerState = {
   repoRef: null,
   repo: null,
   tags: [],
+  branches: [],
   releases: [],
   loadingRepo: false,
   repoError: null,
+  branch: "",
   from: null,
   to: { kind: "latest" },
   version: "",
@@ -90,7 +96,8 @@ function reducer(state: ComposerState, action: Action): ComposerState {
 function errorMessage(e: unknown): string {
   if (e instanceof RateLimitError) {
     const at = new Date(e.resetAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    return `GitHub rate limit reached (60 requests/hour). Try again after ${at}. Repos you already loaded still work.`;
+    const tip = e.limit <= 60 ? " Sign in with GitHub for 5,000 requests/hour." : "";
+    return `GitHub rate limit reached (${e.limit} requests/hour). Try again after ${at}. Repos you already loaded still work.${tip}`;
   }
   if (e instanceof RepoNotFoundError || e instanceof RangeTooLargeError || e instanceof EmptyRangeError) {
     return e.message;
@@ -145,14 +152,21 @@ export function ComposerProvider({ children }: { children: React.ReactNode }) {
       }
       patch({ loadingRepo: true, repoError: null });
       try {
-        const [repo, tags, releases] = await Promise.all([getRepo(parsed), getTags(parsed), getReleases(parsed)]);
+        const [repo, tags, releases, branches] = await Promise.all([
+          getRepo(parsed),
+          getTags(parsed),
+          getReleases(parsed),
+          getBranches(parsed).catch(() => []), // optional: the default branch still works without the list
+        ]);
         patch({
           repoRef: { owner: repo.owner, repo: repo.name },
           repo,
           tags,
+          branches,
           releases,
           loadingRepo: false,
           phase: "range",
+          branch: repo.defaultBranch,
           from: tags[0] ? { kind: "ref", ref: tags[0].name } : { kind: "date", date: repo.createdAt.slice(0, 10) },
           to: { kind: "latest" },
           version: "",
@@ -232,7 +246,7 @@ export function ComposerProvider({ children }: { children: React.ReactNode }) {
       const includeNoise = opts?.includeNoise ?? s.includeNoise;
       patch({ includeNoise, reading: "loading", readError: null, notes: null, drafting: "idle", allNoise: false });
       try {
-        const data = await loadRange(s.repoRef, s.from, s.to, s.repo.defaultBranch);
+        const data = await loadRange(s.repoRef, s.from, s.to, s.branch || s.repo.defaultBranch);
         patch({ rangeData: data, reading: "ready" });
         await buildDraft(data, includeNoise, s.tone);
       } catch (e) {

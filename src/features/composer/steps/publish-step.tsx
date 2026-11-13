@@ -12,13 +12,16 @@ import { isContractConfigured, txExplorerUrl } from "@/config/contract";
 import { ConnectButton } from "@/features/wallet/connect-button";
 import { usePublishRelease } from "@/features/wallet/use-publish-release";
 import { hashNotesJson, serializeNotes, shaToBytes20 } from "@/lib/changelog/notes-hash";
-import { checkMaintainerFile, type VerifyResult } from "@/lib/github/client";
+import { GitHubButton } from "@/features/github-auth/github-button";
+import { useGitHubSession } from "@/features/github-auth/use-github-session";
+import { checkMaintainerFile, checkPushAccess, type VerifyResult } from "@/lib/github/client";
 import { getReleasesFor } from "@/web3/contract";
 import { uploadNotes } from "../api";
 import { PublishSuccess } from "./publish-success";
 import { useComposer } from "../use-composer";
 
-type Verification = { wallet: string; result: VerifyResult } | null;
+/** Keyed by wallet and GitHub login: switching either one means checking again. */
+type Verification = { wallet: string; login: string | null; result: VerifyResult } | null;
 
 const VERIFY_TEXT: Record<string, string> = {
   missing: "No .changelogbot file found on the default branch — this release will be published as unverified.",
@@ -48,6 +51,8 @@ export function PublishStep() {
   const { state } = useComposer();
   const { address, isConnected } = useAccount();
   const { publish, reset, status, error, txHash } = usePublishRelease();
+  const github = useGitHubSession();
+  const login = github.user?.login ?? null;
 
   const [verification, setVerification] = useState<Verification>(null);
   const [checking, setChecking] = useState(false);
@@ -68,13 +73,16 @@ export function PublishStep() {
   const blocker = versionProblem ?? emptyProblem;
 
   const wallet = address?.toLowerCase();
-  const currentVerification = verification && verification.wallet === wallet ? verification.result : null;
+  const currentVerification =
+    verification && verification.wallet === wallet && verification.login === login ? verification.result : null;
 
+  /** `.changelogbot` first (ties this wallet to the repo); else push access of the signed-in GitHub user. */
   const verify = async (): Promise<VerifyResult | null> => {
     if (!address) return null;
     setChecking(true);
-    const result = await checkMaintainerFile(repoRef, repo.defaultBranch, address);
-    setVerification({ wallet: address.toLowerCase(), result });
+    let result = await checkMaintainerFile(repoRef, repo.defaultBranch, address);
+    if (!result.verified && login && (await checkPushAccess(repoRef))) result = { verified: true, method: "github" };
+    setVerification({ wallet: address.toLowerCase(), login, result });
     setChecking(false);
     return result;
   };
@@ -163,12 +171,22 @@ export function PublishStep() {
           {currentVerification?.verified && <Chip tone="new"><CheckIcon className="size-3.5" /> Verified</Chip>}
         </div>
         {currentVerification?.verified ? (
-          <p className="text-muted">Your wallet is listed in <code className="font-mono">.changelogbot</code> on {repo.defaultBranch}.</p>
+          currentVerification.method === "github" ? (
+            <p className="text-muted">Signed in as <span className="font-medium text-ink">@{login}</span>, who can push to {repo.fullName}.</p>
+          ) : (
+            <p className="text-muted">Your wallet is listed in <code className="font-mono">.changelogbot</code> on {repo.defaultBranch}.</p>
+          )
         ) : (
           <>
             <p className="text-muted">
-              Add a file <code className="font-mono text-ink">.changelogbot</code> to your repo containing your wallet to get the Verified badge.
+              Add a file <code className="font-mono text-ink">.changelogbot</code> to your repo containing your wallet to get the Verified badge
+              {github.configured ? ", or sign in with GitHub as someone who can push to this repo." : "."}
             </p>
+            {github.configured && !login && (
+              <div className="flex">
+                <GitHubButton />
+              </div>
+            )}
             {address && (
               <div className="flex items-center gap-2">
                 <code className="min-w-0 flex-1 truncate rounded bg-paper px-2 py-1 font-mono text-xs">{address}</code>

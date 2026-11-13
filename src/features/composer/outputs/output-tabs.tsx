@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRightIcon, GitHubIcon, LinkChainIcon, MailIcon, XLogoIcon } from "@/components/ui/icons";
-import { ButtonLink } from "@/components/ui/button";
+import { GitHubIcon, LinkChainIcon, MailIcon, XLogoIcon } from "@/components/ui/icons";
 import { Tabs, type TabItem } from "@/components/ui/tabs";
 import { publishableNotes } from "@/lib/changelog/notes-hash";
-import { newGitHubReleaseUrl, toEmailText, toGitHubMarkdown } from "@/lib/changelog/outputs";
+import { toEmailText, toGitHubMarkdown } from "@/lib/changelog/outputs";
+import { GitHubReleaseAction } from "./github-release-action";
 import { useOrigin } from "@/lib/hooks/use-origin";
 import { useComposer } from "../use-composer";
 import { TextOutputTab } from "./text-output-tab";
@@ -39,12 +39,7 @@ export function OutputTabs() {
         <TextOutputTab
           fileName={`release-${notes.version}.md`}
           text={toGitHubMarkdown(published)}
-          extra={
-            <ButtonLink external size="sm" variant="secondary" href={newGitHubReleaseUrl(notes.repo, notes.version)}>
-              Open new release on GitHub <ArrowUpRightIcon className="size-3.5" />
-            </ButtonLink>
-          }
-          hint="Paste this into the release description on GitHub."
+          extra={<GitHubReleaseAction notes={published} markdown={toGitHubMarkdown(published)} />}
         />
       )}
       {tab === "x" && <XPostTab notes={published} pageUrl={pageUrl} />}

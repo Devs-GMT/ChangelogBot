@@ -64,6 +64,9 @@ export function RangeStep() {
   if (!repo || state.phase === "repo") return null;
 
   const hasTags = tags.length > 0;
+  const branch = state.branch || repo.defaultBranch;
+  // Default branch first; it may sit past the first page of the list.
+  const branchNames = [repo.defaultBranch, ...state.branches.map((b) => b.name).filter((n) => n !== repo.defaultBranch)];
   const fromMode: FromMode = from?.kind === "ref" ? "tag" : "date";
   const toMode: ToMode = to.kind === "ref" ? "tag" : to.kind === "date" ? "date" : "latest";
   const createdDate = repo.createdAt.slice(0, 10);
@@ -104,6 +107,28 @@ export function RangeStep() {
       <div className="grid gap-4">
         {!hasTags && <Notice>This repo has no tags yet, so pick dates. “From” starts at the first commit.</Notice>}
 
+        {branchNames.length > 1 && (
+          <FieldRow label="Branch" htmlFor="branch">
+            <select
+              id="branch"
+              className={cn(inputClass, "font-mono")}
+              value={branch}
+              onChange={(e) => actions.patch({ branch: e.target.value })}
+              aria-describedby="branch-hint"
+            >
+              {branchNames.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                  {name === repo.defaultBranch ? " (default)" : ""}
+                </option>
+              ))}
+            </select>
+            <p id="branch-hint" className="text-xs text-muted">
+              “Latest” and date ranges follow this branch.
+            </p>
+          </FieldRow>
+        )}
+
         <FieldRow
           label="From"
           htmlFor="from-value"
@@ -127,7 +152,7 @@ export function RangeStep() {
           }
         >
           {to.kind === "latest" ? (
-            <input id="to-value" className={inputClass} value={`Latest commit on ${repo.defaultBranch}`} disabled readOnly />
+            <input id="to-value" className={inputClass} value={`Latest commit on ${branch}`} disabled readOnly />
           ) : (
             edgeInput(to, (e) => actions.patch({ to: e }), "to-value")
           )}
