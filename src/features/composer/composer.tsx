@@ -6,6 +6,7 @@ import { Notice } from "@/components/ui/field";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { Sheet } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
+import { PublishReleaseProvider } from "@/features/wallet/use-publish-release";
 import { cn } from "@/lib/utils/cn";
 import { AppHeader } from "./app-header";
 import { DraftingCanvas } from "./canvas/drafting-canvas";
@@ -28,7 +29,7 @@ function EditorCanvas() {
   if (!state.notes) return <ReadyCanvas />;
 
   return (
-    <div className="mx-auto grid w-full max-w-4xl gap-4">
+    <div className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-4">
       {state.drafting === "fallback" && (
         <Notice tone="warn">
           The AI draft was unavailable, so notes come from Conventional Commit prefixes. Other commits are in the hidden
@@ -147,7 +148,9 @@ function Workspace() {
 export function Composer() {
   return (
     <ComposerProvider>
-      <Workspace />
+      <PublishReleaseProvider>
+        <Workspace />
+      </PublishReleaseProvider>
     </ComposerProvider>
   );
 }

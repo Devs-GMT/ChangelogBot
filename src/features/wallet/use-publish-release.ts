@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { createContext, createElement, useCallback, useContext, useState } from "react";
 import { useAccount, usePublicClient, useSwitchChain, useWriteContract } from "wagmi";
 import type { Hex } from "viem";
 import { CONTRACT_ADDRESS, isContractConfigured } from "@/config/contract";
@@ -20,7 +20,7 @@ export interface PublishArgs {
   verified: boolean;
 }
 
-export function usePublishRelease() {
+function usePublishReleaseState() {
   const { chainId, isConnected } = useAccount();
   const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
@@ -75,4 +75,21 @@ export function usePublishRelease() {
   );
 
   return { publish, reset, status, error, txHash };
+}
+
+const Ctx = createContext<ReturnType<typeof usePublishReleaseState> | null>(null);
+
+/**
+ * Holds the in-flight publish above the layout. The publish panel moves between the desktop column and
+ * the mobile sheet at 1280px — a wallet side panel can cross that mid-transaction — and a remount must
+ * not lose the pending transaction or its success screen.
+ */
+export function PublishReleaseProvider({ children }: { children: React.ReactNode }) {
+  return createElement(Ctx.Provider, { value: usePublishReleaseState() }, children);
+}
+
+export function usePublishRelease() {
+  const ctx = useContext(Ctx);
+  if (!ctx) throw new Error("usePublishRelease must be used inside <PublishReleaseProvider>");
+  return ctx;
 }
