@@ -31,7 +31,7 @@ export function OutputTabs() {
   const pageUrl = `${origin}/c/${notes.repo}`;
 
   return (
-    <section aria-label="Outputs" className="grid gap-3 p-5">
+    <section aria-label="Outputs" className="grid min-w-0 grid-cols-1 gap-3 p-4 sm:p-5">
       <Tabs label="Output format" tabs={TABS} value={tab} onChange={setTab} stretch />
 
       {tab === "page" && <PagePreviewTab notes={published} />}

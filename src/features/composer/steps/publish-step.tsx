@@ -153,7 +153,7 @@ export function PublishStep() {
   }
 
   return (
-    <section aria-label="Publish" className="rise grid gap-3 border-t border-line p-5">
+    <section aria-label="Publish" className="rise grid min-w-0 grid-cols-1 gap-3 border-t border-line p-4 sm:p-5">
       <div>
         <h2 className="text-[15px]">Publish &amp; record</h2>
         <p className="mt-1 text-[13px] text-muted">
@@ -165,7 +165,7 @@ export function PublishStep() {
         <Notice tone="warn">Publishing is not available yet: the contract address is not configured.</Notice>
       )}
 
-      <div className="grid gap-2 rounded-xl border border-line bg-canvas/60 p-3 text-[13px]">
+      <div className="grid min-w-0 gap-2 rounded-xl border border-line bg-canvas/60 p-3 text-[13px] wrap-anywhere">
         <div className="flex items-center justify-between gap-2">
           <span className="font-medium">Verified maintainer</span>
           {currentVerification?.verified && <Chip tone="new"><CheckIcon className="size-3.5" /> Verified</Chip>}
@@ -211,7 +211,7 @@ export function PublishStep() {
       {(error || localError) && <Notice tone="error">{localError ?? error}</Notice>}
 
       {isConnected ? (
-        <Button size="lg" disabled={busy || Boolean(blocker) || !isContractConfigured} onClick={() => void onPublish()}>
+        <Button size="lg" className="w-full" disabled={busy || Boolean(blocker) || !isContractConfigured} onClick={() => void onPublish()}>
           {label}
         </Button>
       ) : (

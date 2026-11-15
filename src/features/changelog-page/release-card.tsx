@@ -34,8 +34,8 @@ export function ReleaseCard({
           }`}
         />
 
-        <header className="@2xl:sticky @2xl:top-24 @2xl:self-start @2xl:text-right">
-          <h2 className="inline-block rounded-lg border border-line bg-paper px-2.5 py-1 font-mono text-base font-semibold tracking-tight shadow-card">
+        <header className="min-w-0 @2xl:sticky @2xl:top-24 @2xl:self-start @2xl:text-right">
+          <h2 className="inline-block max-w-full rounded-lg wrap-anywhere border border-line bg-paper px-2.5 py-1 font-mono text-base font-semibold tracking-tight shadow-card">
             {version}
           </h2>
           <time className="mt-1.5 block text-sm text-muted" dateTime={date}>

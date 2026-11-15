@@ -13,7 +13,7 @@ export function OverviewEditor() {
   if (!notes) return null;
 
   return (
-    <section aria-label="Summary and highlights" className="grid gap-4 rounded-2xl border border-line bg-paper p-4 shadow-card">
+    <section aria-label="Summary and highlights" className="grid min-w-0 grid-cols-1 gap-4 rounded-2xl border border-line bg-paper p-4 shadow-card">
       <Field label="Summary" htmlFor="summary" hint="Two short sentences at the top of the release.">
         <textarea
           id="summary"
@@ -21,7 +21,7 @@ export function OverviewEditor() {
           onChange={(e) => actions.setSummary(e.target.value)}
           rows={2}
           maxLength={600}
-          className={`${inputClass} field-sizing-content h-auto min-h-16 py-2 leading-snug`}
+          className={`${inputClass} field-sizing-content h-auto min-h-16 min-w-0 py-2 leading-snug wrap-anywhere`}
         />
       </Field>
 

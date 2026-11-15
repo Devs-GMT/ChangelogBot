@@ -78,8 +78,13 @@ export function GitHubReleaseAction({ notes, markdown }: { notes: ReleaseNotes; 
   return (
     <div className="grid w-full gap-2">
       <div className="flex flex-wrap items-center gap-2">
-        <Button size="sm" onClick={() => void create()} disabled={creating || !notes.version || tooLong}>
-          {creating ? "Creating…" : `Create release ${notes.version}`}
+        <Button
+          size="sm"
+          className="max-w-full min-w-0"
+          onClick={() => void create()}
+          disabled={creating || !notes.version || tooLong}
+        >
+          <span className="truncate">{creating ? "Creating…" : `Create release ${notes.version}`}</span>
         </Button>
         <label className="flex cursor-pointer items-center gap-1.5 text-xs text-muted">
           <input
@@ -91,7 +96,7 @@ export function GitHubReleaseAction({ notes, markdown }: { notes: ReleaseNotes; 
           Save as draft
         </label>
       </div>
-      <p className="text-xs text-muted">
+      <p className="text-xs text-muted wrap-anywhere">
         As <span className="font-medium text-ink">@{github.user.login}</span>. If the tag doesn’t exist yet, GitHub creates it on{" "}
         <code className="font-mono">{notes.toCommit.slice(0, 7)}</code>.
       </p>

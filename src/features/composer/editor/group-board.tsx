@@ -30,7 +30,7 @@ function SortableNote({ item }: { item: NoteItem }) {
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={cn(isDragging && "opacity-40")}
+      className={cn("min-w-0", isDragging && "opacity-40")}
     >
       <NoteCard
         item={item}
@@ -57,7 +57,7 @@ function Column({ group, items }: { group: (typeof GROUPS)[number]; items: NoteI
     <section
       aria-label={`${group.label} changes`}
       className={cn(
-        "flex min-h-32 flex-col rounded-2xl border border-t-[3px] bg-canvas/70 p-3 transition-colors",
+        "flex min-h-32 min-w-0 flex-col rounded-2xl border border-t-[3px] bg-canvas/70 p-3 transition-colors",
         ACCENT[group.id],
         isOver ? "border-violet/50 bg-violet-soft/60 ring-4 ring-violet/10" : "border-line",
       )}
@@ -137,7 +137,7 @@ export function GroupBoard() {
       onDragEnd={onDragEnd}
       onDragCancel={() => setActiveId(null)}
     >
-      <div className="grid items-start gap-3 @2xl:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-3 @2xl:grid-cols-2">
         {GROUPS.map((g) => (
           <Column key={g.id} group={g} items={byGroup(g.id)} />
         ))}

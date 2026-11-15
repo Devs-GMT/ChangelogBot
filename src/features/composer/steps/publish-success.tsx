@@ -40,7 +40,7 @@ export function PublishSuccess({ repo, version, txHash }: { repo: string; versio
         <CheckIcon className="size-7" />
       </span>
       <h2 className="mt-4 text-xl tracking-[-0.03em]">Recorded on BOT Chain</h2>
-      <p className="mx-auto mt-1.5 max-w-xs text-sm text-muted">
+      <p className="mx-auto mt-1.5 max-w-xs text-sm text-muted wrap-anywhere">
         <strong className="font-semibold text-ink">{version}</strong> is now part of the permanent history of{" "}
         <strong className="font-semibold text-ink">{repo}</strong>.
       </p>

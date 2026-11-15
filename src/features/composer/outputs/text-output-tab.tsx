@@ -15,11 +15,11 @@ export function TextOutputTab({
   extra?: React.ReactNode;
 }) {
   return (
-    <div className="grid gap-2.5">
+    <div className="grid min-w-0 grid-cols-1 gap-2.5">
       <FileBox
         name={fileName}
         action={<CopyButton text={text} />}
-        bodyClassName="max-h-[420px] overflow-auto whitespace-pre-wrap break-words"
+        bodyClassName="max-h-[420px] overflow-auto whitespace-pre-wrap wrap-anywhere"
       >
         {text}
       </FileBox>

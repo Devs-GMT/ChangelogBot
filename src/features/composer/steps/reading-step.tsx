@@ -24,7 +24,7 @@ function RateLimitLine() {
   useEffect(() => subscribeRateLimit(setRate), []);
   if (!rate) return null;
   return (
-    <p className="text-xs text-muted">
+    <p className="text-xs text-muted wrap-anywhere">
       GitHub requests left this hour: <span className="font-mono text-ink">{rate.remaining}</span> / {rate.limit}
     </p>
   );
@@ -37,7 +37,7 @@ export function ReadingStep() {
   const { reading, stats, noiseCount, allNoise, readError } = state;
 
   return (
-    <section aria-label="Changes" className="grid gap-3 px-5 py-5">
+    <section aria-label="Changes" className="grid min-w-0 grid-cols-1 gap-3 px-5 py-5">
       {reading === "loading" && (
         <div role="status" className="rounded-xl border border-line bg-canvas/50 p-4">
           <div className="mb-3 flex items-center gap-2 text-[13px] text-muted">

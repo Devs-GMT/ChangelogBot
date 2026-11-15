@@ -8,15 +8,15 @@ export function NotesBody({ notes }: { notes: ReleaseNotes }) {
   const grouped = itemsByGroup(notes);
 
   return (
-    <div className="grid gap-5">
-      {notes.summary && <p className="text-[15px] leading-relaxed text-ink">{notes.summary}</p>}
+    <div className="grid min-w-0 grid-cols-1 gap-5">
+      {notes.summary && <p className="text-[15px] leading-relaxed text-ink wrap-anywhere">{notes.summary}</p>}
 
       {notes.highlights.length > 0 && (
         <ul className="grid gap-3">
           {notes.highlights.map((h, i) => {
             const image = safeHttpUrl(h.imageUrl);
             return (
-              <li key={i} className="rounded-xl border border-line bg-canvas/60 p-3.5">
+              <li key={i} className="min-w-0 rounded-xl border border-line bg-canvas/60 p-3.5 wrap-anywhere">
                 <p className="text-sm font-semibold">{h.title}</p>
                 {h.text && <p className="mt-0.5 text-sm text-muted">{h.text}</p>}
                 {image && (
@@ -26,7 +26,7 @@ export function NotesBody({ notes }: { notes: ReleaseNotes }) {
                     alt={h.title}
                     loading="lazy"
                     referrerPolicy="no-referrer"
-                    className="mt-3 max-h-72 rounded-lg border border-line"
+                    className="mt-3 h-auto max-h-72 max-w-full rounded-lg border border-line object-contain"
                   />
                 )}
               </li>
@@ -37,13 +37,13 @@ export function NotesBody({ notes }: { notes: ReleaseNotes }) {
 
       {GROUPS.map((g) =>
         grouped[g.id].length ? (
-          <section key={g.id} aria-label={g.label}>
+          <section key={g.id} aria-label={g.label} className="min-w-0">
             <GroupBadge group={g.id} />
             <ul className="mt-2.5 grid gap-2">
               {grouped[g.id].map((item) => (
                 <li key={item.id} className="flex gap-2 text-[15px] leading-snug">
                   <span className="mt-2 size-1 shrink-0 rounded-full bg-muted/60" aria-hidden="true" />
-                  <span>
+                  <span className="min-w-0 wrap-anywhere">
                     {item.text}
                     {item.refs.map((r) => {
                       const url = safeHttpUrl(r.url);
@@ -53,7 +53,7 @@ export function NotesBody({ notes }: { notes: ReleaseNotes }) {
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-1.5 font-mono text-xs text-muted underline-offset-2 hover:text-violet hover:underline"
+                          className="ml-1.5 inline-block font-mono text-xs text-muted underline-offset-2 hover:text-violet hover:underline"
                         >
                           {r.label}
                         </a>

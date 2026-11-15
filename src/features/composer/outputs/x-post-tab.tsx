@@ -47,10 +47,10 @@ export function XPostTab({ notes, pageUrl }: { notes: ReleaseNotes; pageUrl: str
   const fullThread = [post, ...thread].join("\n\n— — —\n\n");
 
   return (
-    <div className="grid gap-3">
+    <div className="grid min-w-0 grid-cols-1 gap-3">
       <div className="rounded-xl border border-line bg-paper p-4 shadow-card">
-        <p className="whitespace-pre-wrap break-words text-[15px] leading-snug">{post}</p>
-        <div className="mt-3 flex items-center justify-between border-t border-line pt-2.5 text-xs">
+        <p className="whitespace-pre-wrap wrap-anywhere text-[15px] leading-snug">{post}</p>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-line pt-2.5 text-xs">
           <span className={cn("font-mono tabular-nums", len > X_LIMIT ? "text-breaking" : "text-muted")}>
             {len}/{X_LIMIT}
           </span>
@@ -74,9 +74,9 @@ export function XPostTab({ notes, pageUrl }: { notes: ReleaseNotes; pageUrl: str
       </div>
 
       {showThread && (
-        <div className="grid gap-2">
+        <div className="grid grid-cols-1 gap-2">
           {thread.map((t, i) => (
-            <p key={i} className="whitespace-pre-wrap rounded-lg border border-line bg-canvas px-3 py-2 text-[13px]">
+            <p key={i} className="min-w-0 whitespace-pre-wrap rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] wrap-anywhere">
               {t}
             </p>
           ))}

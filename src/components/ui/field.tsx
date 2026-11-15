@@ -44,7 +44,7 @@ export function Notice({
     error: "border-breaking/25 bg-breaking-soft text-ink",
   };
   return (
-    <div role={tone === "error" ? "alert" : "status"} className={cn("rounded-lg border px-3 py-2 text-[13px]", tones[tone], className)}>
+    <div role={tone === "error" ? "alert" : "status"} className={cn("min-w-0 rounded-lg border px-3 py-2 text-[13px] wrap-anywhere", tones[tone], className)}>
       {children}
     </div>
   );

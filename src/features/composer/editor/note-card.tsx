@@ -18,7 +18,7 @@ export function NoteCard({ item, onEdit, onHide, onMove, handleProps, overlay }:
   return (
     <div
       className={cn(
-        "group/note rounded-xl border border-line bg-paper p-2.5 text-sm shadow-card transition hover:-translate-y-px hover:border-violet/30",
+        "group/note min-w-0 rounded-xl border border-line bg-paper p-2.5 text-sm shadow-card transition hover:-translate-y-px hover:border-violet/30",
         overlay && "shadow-float ring-1 ring-violet/30",
       )}
     >
@@ -47,7 +47,7 @@ export function NoteCard({ item, onEdit, onHide, onMove, handleProps, overlay }:
           maxLength={400}
           aria-label="Release note text"
           placeholder="Describe the change for users…"
-          className="field-sizing-content min-h-[1.75rem] w-full resize-none rounded bg-transparent px-1 py-0.5 leading-snug focus:bg-canvas focus:outline-none"
+          className="field-sizing-content min-h-[1.75rem] w-full min-w-0 resize-none wrap-anywhere rounded bg-transparent px-1 py-0.5 leading-snug focus:bg-canvas focus:outline-none"
         />
       </div>
 
@@ -58,7 +58,7 @@ export function NoteCard({ item, onEdit, onHide, onMove, handleProps, overlay }:
             href={r.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[11px] text-muted underline-offset-2 hover:text-violet hover:underline"
+            className="min-w-0 break-all font-mono text-[11px] text-muted underline-offset-2 hover:text-violet hover:underline"
           >
             {r.label}
           </a>

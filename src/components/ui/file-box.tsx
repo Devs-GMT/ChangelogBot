@@ -17,17 +17,19 @@ export function FileBox({
   return (
     <div className={cn("overflow-hidden rounded-xl border border-line bg-paper shadow-card", className)}>
       <div className="flex items-center justify-between gap-3 border-b border-line bg-canvas px-4 py-2.5">
-        <div className="flex items-center gap-2 font-mono text-xs text-muted">
+        <div className="flex min-w-0 items-center gap-2 font-mono text-xs text-muted">
           <span aria-hidden="true" className="flex gap-1">
             <i className="size-2 rounded-full bg-line" />
             <i className="size-2 rounded-full bg-line" />
             <i className="size-2 rounded-full bg-line" />
           </span>
-          <span className="text-ink">{name}</span>
+          <span className="truncate text-ink" title={name}>
+            {name}
+          </span>
         </div>
         {action}
       </div>
-      <div className={cn("p-4 font-mono text-[13px] leading-relaxed text-ink", bodyClassName)}>{children}</div>
+      <div className={cn("min-w-0 p-4 font-mono text-[13px] leading-relaxed text-ink", bodyClassName)}>{children}</div>
     </div>
   );
 }

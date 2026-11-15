@@ -21,7 +21,7 @@ export function PagePreviewTab({ notes }: { notes: ReleaseNotes }) {
           {host}/c/{notes.repo}
         </span>
       </div>
-      <div className="max-h-[520px] overflow-auto px-4">
+      <div className="max-h-[520px] overflow-y-auto overflow-x-hidden px-3 sm:px-4">
         <ReleaseCard version={notes.version} date={notes.date} notes={notes} pending />
       </div>
     </div>
