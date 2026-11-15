@@ -44,4 +44,4 @@ next-env.d.ts
 /ProjectBuilder/
 /.agents/
 /.codegraph/
-/design-options/
+/design-options//design-options/
